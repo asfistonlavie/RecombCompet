@@ -8,7 +8,7 @@
 import os
 os.getcwd()
 # dossier où sont les reads et la ref
-os.chdir(path="/home/stagiaire/Documents/Projet_alignement_sequences/data")
+os.chdir(path="/home/stagiaire/Documents/Projet_alignement_sequences/RecombCompet/data")
 
 # Ajouter le chemin de minimap2 au PATH
 os.environ["PATH"] += os.pathsep + "/home/stagiaire/minimap2"
@@ -32,7 +32,7 @@ reference_genome = f"{ref_prefix}{read_number}.fa"
 reads_file = f"{read_prefix}{read_number}.fastq"
 
 # Créer un dossier pour stocker les résultats
-result_dir = f"res_{read_number}"
+result_dir = os.path.join("/home/stagiaire/Documents/Projet_alignement_sequences/RecombCompet", "res", f"res_{read_number}")
 os.makedirs(result_dir, exist_ok=True)
 
 # Chemins des fichiers de sortie
@@ -115,7 +115,7 @@ if calc_percent == "oui":
     }
 
     # Stocker les résultats dans un fichier texte
-    output_file = "read_size_percentages_by_threshold.txt"
+    output_file = os.path.join(result_dir, f"read_size_percentages_by_threshold_{read_number}.txt")
     with open(output_file, "w") as file:
         file.write("Taille du fragment\tNombre d'occurrences\tPourcentage total\tPourcentage recombinant\n")
         for size, count in read_size_counts.items():
@@ -138,7 +138,8 @@ if calc_percent == "oui":
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.legend()
-    plt.savefig("read_size_distribution_percentages_histogram.png")
+    output_plot = os.path.join(result_dir, f"read_size_distribution_percentages_histogram_{read_number}.png")
+    plt.savefig(output_plot)
     plt.show()
 
 
