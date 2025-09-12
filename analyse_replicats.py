@@ -29,7 +29,7 @@ def reads_by_intervals(boundaries, read_starts, total_reads, label):
     return results
 
 
-def analyse_replicats(nomref, nomread, nbdereplicat=3,
+def analyse_replicats(nomref, nomread, nbdereplicat=1,
                       data_dir="./RecombCompet/data",
                       res_dir="./RecombCompet/res"):
     """
@@ -184,12 +184,13 @@ import argparse
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyse attB: mapping, détection pics, % par intervalle, réplicats")
-    parser.add_argument("--ref", required=True, help="préfixe du fichier référence (ex: ref2.12 -> ref2.12.fa)")
-    parser.add_argument("--read", required=True, help="préfixe des reads (ex: data2.12 -> data2.12-1.fastq ...)")
-    parser.add_argument("--rep", type=int, default=1, help="nombre de réplicats")
-    parser.add_argument("--datadir", type=str, default="/mnt/c/Users/lacie/OneDrive/Documents/THESE/3_Projet_Alignement_Sequence/RecombCompet/data",
-                        help="dossier contenant ref.fa et reads")
-    parser.add_argument("--resdir", type=str, default="/mnt/c/Users/lacie/OneDrive/Documents/THESE/3_Projet_Alignement_Sequence/RecombCompet/res",
+    parser.add_argument("--ref", required=True, help="préfixe du fichier référence, sans extension (ex: ref2.12 -> ref2.12.fa)")
+    parser.add_argument("--read", required=True, help="préfixe des reads, sans extension (ex: data2.12 -> data2.12-1.fastq, data2.12-2.fastq...)\n"
+             "Attention : Les réplicats doivent suivre le format: prefix-1.fastq, prefix-2.fastq, etc.")
+    parser.add_argument("--rep", type=int, default=1, help="nombre de réplicats (default = 1)")
+    parser.add_argument("--datadir", type=str, default="./RecombCompet/data",
+                        help="dossier contenant ref.fa et reads.fastq")
+    parser.add_argument("--resdir", type=str, default="./RecombCompet/res",
                         help="dossier pour sauvegarder les résultats")
     args = parser.parse_args()
 
