@@ -33,7 +33,7 @@ def analyse_replicats(nomref, nomread, nbdereplicat=3,
                       data_dir="/mnt/c/Users/lacie/OneDrive/Documents/THESE/3_Projet_Alignement_Sequence/RecombCompet/data",
                       res_dir="/mnt/c/Users/lacie/OneDrive/Documents/THESE/3_Projet_Alignement_Sequence/RecombCompet/res"):
     """
-    Analyse plusieurs réplicats comme ton script initial
+    Analyse plusieurs réplicats et produit un barplot des % de recombinaison à chaque cassure, et si plusieurs réplicats, calcule l'écart-type
     """
 
     attB_seq = "gcccggatgatcctgacgacggagaccgccgtcgtcgacaagccggccga".upper()
