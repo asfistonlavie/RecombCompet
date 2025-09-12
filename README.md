@@ -2,7 +2,7 @@
 Building a genetic circuit for differentiation by recombination
 
 Usage : 
-
+```bash
 python3 analyse_replicats.py -h
 usage: analyse_replicats.py [-h] --ref REF --read READ [--rep REP] [--datadir DATADIR] [--resdir RESDIR]
 
@@ -16,3 +16,4 @@ options:
   --rep REP          nombre de réplicats (default = 1)
   --datadir DATADIR  dossier contenant ref.fa et reads.fastq
   --resdir RESDIR    dossier pour sauvegarder les résultats
+```
