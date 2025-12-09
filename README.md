@@ -316,7 +316,7 @@ For large datasets:
 
 ## License
 
-This script is provided as-is for research purposes under the CClicence.
+This script is provided as-is for research purposes under the GPL3.0 licence.
 
 ---
 
