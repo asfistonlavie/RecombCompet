@@ -1,0 +1,18 @@
+Summary Statistics - 3 replicate(s)
+============================================================
+Breakpoint offset: attB + 21 nucleotides
+attB positions: [265, 527, 785, 1035, 1285, 1535]
+Breakpoint positions: [286, 548, 806, 1056, 1306, 1556]
+============================================================
+
+Category	Mean(%)	Std(%)
+Break0	1.24	1.08
+Break1	7.85	1.70
+Break2	11.43	2.05
+Break3	26.81	3.36
+Break4	19.62	6.33
+Break5	20.19	2.47
+Break6	12.87	0.32
+
+Note: Break0 = non-recombinant reads (before first breakpoint)
+      Break1-N = recombinant reads (between breakpoints)

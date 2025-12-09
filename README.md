@@ -11,10 +11,13 @@ The tool:
 - Calculates the percentage of reads in each interval (non-recombinant vs recombinant categories)
 - Supports multiple replicates with statistical analysis (mean ± standard deviation)
 - Generates comprehensive visualizations and summary statistics
+- Uses a default attB sequence file unless the user provides a custom one
 
 ## Features
 
-- Automatic breakpoint detection based on attB sequence  
+- Automatic breakpoint detection based on attB sequence 
+- Default attB sequence file (attB_default.txt) automatically used
+- Optional custom attB file via --attb myfile.txt 
 - Multi-replicate support with standard deviation calculation  
 - Visualization: histograms with colored intervals and barplots  
 - Statistical summary exported to text files  
@@ -52,24 +55,44 @@ pip install pysam numpy matplotlib biopython scipy
 ```
 
 ## Usage
-
 ### Basic command
 
-Usage : 
+Usage :
+
 ```bash
-python3 analyse_replicats.py [-h] --ref REF --read READ [--rep REP] [--datadir DATADIR] [--resdir RESDIR]
+python3 analyse_replicats.py \
+    --ref REF \
+    --read READ \
+    [--rep REP] \
+    [--datadir DATADIR] \
+    [--resdir RESDIR] \
+    [--attb ATTB]
+```
 
-Analyse attB: mapping, détection pics, % par intervalle, réplicats
+options: 
+```bash
+-h, --help         Show this help message and exit
+--ref REF          Reference prefix (without .fa)
+                   Example: ref2.12 → ref2.12.fa
+--read READ        Reads prefix (without .fastq)
+                   Example: data2.12 → data2.12-1.fastq, data2.12-2.fastq ...
+                   Replicates must follow the format: prefix-1.fastq, prefix-2.fastq, etc.
+--rep REP          Number of replicates (default = 1)
+--datadir DATADIR  Directory containing reference and read files
+--resdir RESDIR    Output directory for results
+--attb ATTB        Optional file containing a custom attB sequence
+                   If omitted, the default attB file is automatically used
+```
 
-options:
-  -h, --help         show this help message and exit
-  --ref REF          préfixe du fichier référence, sans extension (ex: ref2.12 -> ref2.12.fa)
-  --read READ        préfixe des reads, sans extension (ex: data2.12 -> data2.12-1.fastq, data2.12-2.fastq...) Attention : Les réplicats
-                     doivent suivre le format: prefix-1.fastq, prefix-2.fastq, etc.
-  --rep REP          nombre de réplicats (default = 1)
-  --datadir DATADIR  dossier contenant ref.fa et reads.fastq
-  --resdir RESDIR    dossier pour sauvegarder les résultats
-``
+attB sequence handling :
+- If --attb is provided, the script loads the attB sequence from the given file.
+- If not, it automatically loads the default file:
+
+```bash
+RecombCompet/data/attB_default.txt
+```
+- The sequence must be written as a single line of nucleotides (a/t/g/c) in lower case.
+- The breakpoint is assumed to be located at position +21 of the attB motif.
 
 ---
 
@@ -84,6 +107,7 @@ RecombCompet/
 │   ── data2.12-1.fastq    # Replicate 1
 │   ── data2.12-2.fastq    # Replicate 2
 │   ── data2.12-3.fastq    # Replicate 3
+│   ── attB_default.txt    # attB sequence
 └── res/                     # Results will be created here
 ```
 
@@ -127,6 +151,15 @@ python analyse_replicats.py \
     --rep 2 \
     --datadir /home/user/my_data \
     --resdir /home/user/my_results
+```
+
+
+### Using a custom attB file
+```bash
+python analyse_replicats.py \
+    --ref my_reference \
+    --read my_reads \
+    --attb /home/user/my_data/my_attB_sequence.txt
 ```
 
 ---
@@ -181,6 +214,8 @@ Break3      >9021          200     2.00
 
 ### Visualizations
 
+Each replicate produces an image:
+
 **Histogram** (`hist_breakpoints_N.png`):
 - Grey bars: read distribution along reference
 - Colored zones: intervals between breakpoints
@@ -188,10 +223,21 @@ Break3      >9021          200     2.00
 - Red solid lines: actual breakpoints (attB+21)
 - Orange dashed lines: automatically detected peaks
 
+**Histogram example (`hist_breakpoints_1.png`):**
+![Histogram of breakpoints](res/res_ref2.11/hist_breakpoints_1.png)
+
+
 **Barplot** (`barplot_breakpoints_N.png`):
 - X-axis: recombination categories
 - Y-axis: percentage of reads
 - Error bars: standard deviation (if multiple replicates)
+
+**Barplot example (`barplot_breakpoints_1.png`):**
+![Barplot of breakpoint categories](res/res_ref2.11/barplot_breakpoints_1.png)
+
+**Barplot with SD example (`barplot_breakpoints_mean_ref2.11.png`):**
+![Barplot of breakpoint categories with errors bars for multiple replicates](res/res_ref2.11/barplot_breakpoints_mean_ref2.11.png)
+
 
 ---
 
@@ -199,19 +245,28 @@ Break3      >9021          200     2.00
 
 ### Breakpoint Detection
 
-1. **attB sequence identification**:
+1. **attB sequence loading**:
+The attB motif is not hard-coded. It is read from a file:
+- If the user provides --attb custom_file.txt, the script loads that sequence.
+- Otherwise, it automatically uses the default file:
+```
+RecombCompet/data/attB_default.txt
+```
+The file must contain the attB motif on a single line (a/t/g/c only).
+
+2. **attB sequence identification**:
    ```
    attB = "gcccggatgatcctgacgacggagaccgccgtcgtcgacaagccggccga"
    ```
-   The script searches for this 51 bp sequence in the reference genome.
+   The script searches for this 51 bp sequence (default attB sequence) in the reference genome.
 
-2. **Breakpoint calculation**:
+3. **Breakpoint calculation**:
    ```
    Breakpoint position = attB_start + 21
    ```
    Position 21 corresponds to the cut site between "gg" nucleotides.
 
-3. **Interval classification**:
+4. **Interval classification**:
    - Reads starting before the first breakpoint → non-recombinant
    - Reads starting between breakpoints → recombinant (different categories)
 
@@ -240,8 +295,9 @@ For multiple replicates:
 - Ensure `.fa` and `.fastq` extensions are NOT included in `--ref` and `--read`
 
 **Error: "No attB sequence found"**
+- If attB is custom : Verify that '--attb' points to the correct file
 - Verify that the attB sequence exists in your reference genome
-- Check that the reference is in FASTA format
+- Check that the reference is in FASTA format (.fa)
 
 **Low alignment rate**
 - Verify read quality
@@ -260,7 +316,7 @@ For large datasets:
 
 ## License
 
-This script is provided as-is for research purposes under the CClicence. 
+This script is provided as-is for research purposes under the CClicence.
 
 ---
 
@@ -269,6 +325,7 @@ This script is provided as-is for research purposes under the CClicence.
 For questions or issues, please contact: 
 - capucine.mayoud@umontpellier.fr
 - anna-sophie.fiston-lavier@umontpellier.fr
+
 ---
 
 ## Version History

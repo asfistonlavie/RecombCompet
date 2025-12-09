@@ -1,0 +1,11 @@
+# Breakpoint analysis: intervals based on attB+21 positions
+# attB positions: [5933, 6195, 6453, 6703, 6953, 7203]
+# Breakpoint positions (attB+21): [5954, 6216, 6474, 6724, 6974, 7224]
+Category	Interval	Reads	Percentage
+Break0	<5954	5	1.08
+Break1	5954-6216	79	17.03
+Break2	6216-6474	75	16.16
+Break3	6474-6724	81	17.46
+Break4	6724-6974	74	15.95
+Break5	6974-7224	82	17.67
+Break6	>7224	68	14.66

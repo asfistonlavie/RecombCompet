@@ -1,0 +1,6 @@
+# Breakpoint analysis: intervals based on attB+21 positions
+# attB positions: [0]
+# Breakpoint positions (attB+21): [21]
+Category	Interval	Reads	Percentage
+Break0	<21	0	0.00
+Break1	>21	2794	100.00
