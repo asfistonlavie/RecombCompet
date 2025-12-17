@@ -224,7 +224,7 @@ Each replicate produces an image:
 - Orange dashed lines: automatically detected peaks
 
 **Histogram example (`hist_breakpoints_1.png`):**
-![Histogram of breakpoints](res/res_ref2.11/hist_breakpoints_1.png)
+![Histogram of breakpoints](res/res_ref-40/hist_breakpoints_1.png)
 
 
 **Barplot** (`barplot_breakpoints_N.png`):
@@ -233,10 +233,10 @@ Each replicate produces an image:
 - Error bars: standard deviation (if multiple replicates)
 
 **Barplot example (`barplot_breakpoints_1.png`):**
-![Barplot of breakpoint categories](res/res_ref2.11/barplot_breakpoints_1.png)
+![Barplot of breakpoint categories](res/res_ref-40/barplot_breakpoints_1.png)
 
 **Barplot with SD example (`barplot_breakpoints_mean_ref2.11.png`):**
-![Barplot of breakpoint categories with errors bars for multiple replicates](res/res_ref2.11/barplot_breakpoints_mean_ref2.11.png)
+![Barplot of breakpoint categories with errors bars for multiple replicates](res/res_ref-40/barplot_breakpoints_mean_ref.png)
 
 
 ---
